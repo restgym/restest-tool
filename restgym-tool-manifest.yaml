@@ -1,0 +1,30 @@
+# RESTgym tool manifest
+manifest_version: 1
+
+id: restest
+name: RESTest
+# version:                        # not found (the image isagroup/restgym-restest is tagged "latest")
+description: Automated black-box testing of RESTful web APIs. Runs the FT and RT generators in parallel, then the LLM-based RT-LLM generator.
+license: Apache-2.0
+repository: https://github.com/isa-group/RESTest
+authors:
+  - name: Alberto Martin-Lopez
+    affiliation: University of Seville
+    orcid: 0000-0001-5501-9225
+  - name: Sergio Segura
+    affiliation: University of Seville
+    orcid: 0000-0001-8816-6213
+  - name: Antonio Ruiz-Cortés
+    affiliation: University of Seville
+    orcid: 0000-0001-9827-1834
+citation:
+  doi: 10.1145/3460319.3469082       # ISSTA 2021 (tool demo)
+
+compatibility:
+  # openapi_versions:             # not found for the packaged version (the current README claims 2.0, 3.0 and 3.1, but the image predates it)
+  spec_formats: [json]            # config.sh generates the configuration from ${API}-openapi.json (it also copies ${API}.yaml)
+  budgets: [time]
+
+llm:
+  models: [Llama-3.2-3B-Instruct-Q4_K_M, Llama-3.2-1B-Instruct-Q4_K_M]   # GGUF models downloaded into the image
+  hosting: local
