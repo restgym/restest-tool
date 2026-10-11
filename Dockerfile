@@ -2,7 +2,7 @@
 #
 # It is built with RESTgym's own checkout as the build context - that is how RESTgym's build step
 # invokes Docker - so every COPY below starts at tools/, and the directory holding this file has
-# to be tools/restest2.
+# to be tools/restest.
 #
 # RESTest is built from source at a commit rather than copied from a machine, so the image can say
 # exactly what it contains and anybody can rebuild the same one.
@@ -47,8 +47,8 @@ RUN mkdir -p /dist/lib \
 FROM eclipse-temurin:21-jdk
 
 COPY --from=build /dist /tool/dist
-COPY ./tools/restest2/restest /tool/restest
-COPY ./tools/restest2/entrypoint.sh /tool/entrypoint.sh
+COPY ./tools/restest/restest /tool/restest
+COPY ./tools/restest/entrypoint.sh /tool/entrypoint.sh
 # A checkout made with Git for Windows turns line endings into CRLF unless told otherwise, and a
 # script whose first line is "#!/bin/sh\r" does not start: the container dies at once with
 # "exec /tool/entrypoint.sh: no such file or directory". The carriage returns are taken out here,
@@ -58,7 +58,7 @@ RUN sed -i 's/\r$//' /tool/restest /tool/entrypoint.sh \
 
 # What RESTest is handed besides the API's document: the files under config/, which
 # config/README.md describes. An empty config/ is RESTest with its published defaults.
-COPY ./tools/restest2/config /tool/config
+COPY ./tools/restest/config /tool/config
 
 WORKDIR /tool
 ENTRYPOINT ["/tool/entrypoint.sh"]

@@ -22,15 +22,15 @@ The image compiles RESTest from source at that commit; nothing here is a binary.
 
 ## Install
 
-The tool's directory under `tools/` must be called **`restest2`**: RESTgym builds a tool's image
+The tool's directory under `tools/` must be called **`restest`**: RESTgym builds a tool's image
 with the whole RESTgym checkout as the build context, so the Dockerfile's `COPY` lines name that
 path. From the root of a RESTgym checkout, either
 
 ```bash
-git submodule add https://github.com/isa-group/restest4restgym.git tools/restest2
+git submodule add https://github.com/isa-group/restest4restgym.git tools/restest
 ```
 
-or copy this repository's files into `tools/restest2/`. Then build and run as for any tool:
+or copy this repository's files into `tools/restest/`. Then build and run as for any tool:
 
 ```bash
 ./restgym.sh build-images        # option 2, "Build images"
