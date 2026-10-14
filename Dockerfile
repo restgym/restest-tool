@@ -10,11 +10,20 @@
 ARG RESTEST_REPOSITORY=https://github.com/isa-group/RESTest.git
 ARG RESTEST_REF=45cd3dc89753e7e366f67f10b73006c22ed68d53
 
-FROM eclipse-temurin:25-jdk AS build
+# Both images are pinned to a digest: a tag such as 25-jdk moves to every new build of Java and of Ubuntu, and the
+# image would change under the same Dockerfile.
+FROM eclipse-temurin:25-jdk@sha256:63f965b560b905c9633218330ac3516304b526a74fdc323a504b05c06e712c30 AS build
 ARG RESTEST_REPOSITORY
 ARG RESTEST_REF
 
-RUN apt-get update \
+# Ubuntu packages as published on this date (snapshot.ubuntu.com, the same date as the base image of the APIs in
+# RESTgym), so that every build installs the same versions. The snapshot archive serves amd64 only: on arm64 the
+# current packages are used. It sometimes answers with errors, which apt retries.
+ARG UBUNTU_SNAPSHOT=20261010T000000Z
+RUN echo 'Acquire::Retries "10";' > /etc/apt/apt.conf.d/80-retries \
+ && sed -i -E "s#https?://(archive|security)\.ubuntu\.com/ubuntu/?#https://snapshot.ubuntu.com/ubuntu/${UBUNTU_SNAPSHOT}/#" \
+        /etc/apt/sources.list.d/ubuntu.sources \
+ && apt-get update \
  && apt-get install -y --no-install-recommends git ca-certificates \
  && rm -rf /var/lib/apt/lists/*
 
@@ -44,7 +53,7 @@ RUN mkdir -p /dist/lib \
 # "no implementation of the random number generator algorithm is available". Java 21 rather
 # than the newest, because 21 is the oldest release RESTest supports and a measurement should
 # be run on the floor of that range, not the ceiling.
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:21-jdk@sha256:f9bf7e9fe2f9bc4657537c1a7e20c768f0c3bafca41598263be4714783dd62eb
 
 COPY --from=build /dist /tool/dist
 COPY ./tools/restest/restest /tool/restest
