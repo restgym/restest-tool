@@ -12,11 +12,12 @@ HOST="${HOST:-localhost}"
 PORT="${PORT:-9090}"
 TIME_BUDGET="${TIME_BUDGET:-60}"
 
-# The platform mounts every API's document read-only under /specifications, in two shapes:
-# the YAML one each API project publishes, and a JSON conversion of it. Prefer the original.
-specification="/specifications/${API}.yaml"
+# The platform mounts every API's document read-only under /specifications, in four shapes:
+# OpenAPI 3 and Swagger 2.0, JSON and YAML. RESTest reads JSON and YAML alike: it is handed the
+# OpenAPI 3 JSON one, or the Swagger 2.0 YAML one when there is no JSON one.
+specification="/specifications/${API}-openapi.json"
 if [ ! -f "$specification" ]; then
-  specification="/specifications/${API}-openapi.json"
+  specification="/specifications/${API}-swagger.yaml"
 fi
 
 url="http://${HOST}:${PORT}"

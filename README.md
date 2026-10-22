@@ -44,11 +44,11 @@ Central, for its dependencies. It takes a few minutes the first time.
 ## What the image does
 
 It reads the variables RESTgym sets - `API`, `HOST`, `PORT` and `TIME_BUDGET` (minutes) - picks the
-API's document from `/specifications` (`<API>.yaml`, or `<API>-openapi.json` when there is no
-YAML one), and runs
+API's document from `/specifications` (`<API>-openapi.json`, the OpenAPI 3 JSON one, or
+`<API>-swagger.yaml`, the Swagger 2.0 YAML one, when there is no JSON one), and runs
 
 ```bash
-restest run /specifications/<API>.yaml --url http://$HOST:$PORT --budget ${TIME_BUDGET}m \
+restest run /specifications/<API>-openapi.json --url http://$HOST:$PORT --budget ${TIME_BUDGET}m \
     --out /tmp/restest-out/pass-<n>
 ```
 
